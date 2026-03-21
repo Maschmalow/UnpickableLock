@@ -22,3 +22,7 @@
 
 "true_gate_depth" = 1.25mm
 
+"key_notches_dia" = 4mm
+
+"key_notches_offset_angle" = 25deg
+
