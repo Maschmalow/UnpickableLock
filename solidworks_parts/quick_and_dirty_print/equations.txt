@@ -1,0 +1,34 @@
+﻿"key_pin_length"= 25.00mm
+
+"key_pin_dia"= 20.00mm
+
+"driver_pin_travel"= 3.00mm
+
+"driver_pin_dia"= 3mm
+
+"driver_pin_neck_dia"= 2.00mm
+
+"driver_pin_head_dia" = 2mm
+
+"driver_pin_head_length" = 2mm
+
+"plug_wall_thickness" = 2mm
+
+"plug_spring_solid_length"= 2mm
+
+"plug_length"= 2 * "key_pin_length" + 2 * "plug_wall_thickness" + "plug_spring_solid_length"
+
+"plug_dia"= "key_pin_dia" + 2*("driver_pin_travel" + 1mm + "plug_spring_solid_length" + 1mm)
+
+"true_gate_depth" = 1.25mm
+
+"key_notches_dia" = 4mm
+
+"key_notches_offset_angle" = 25deg
+
+"key_offset_angle" = 60deg
+
+"key_offset_len" = 6mm
+
+"allowance" = 0.2mm
+
