@@ -48,13 +48,13 @@ By "leak", I mean that it is possible to distinguish this state from the others.
 
 This statement can be proved in practice for a given lock, the assumption here is that it is always possible to do so.
 
-Using this hypothesis, it is easy to prove that any lock for which the "pin" is made of multiple parts connected with "AND"s cannot be secure. The proof consists in exhibiting a typical lock-picking attack where each part of the pin is moved independently and the hypothesis is used to determinin whether one part is at the right position. Iterating this let us find to correct position of each part independently from the others, and hence the attack time is only the sum of the number of part positions instead of the product. In a sense, the assumption of imperfect "AND" is just the justification that lock-picking is always possible for a very large class of locks (in this case, all locks that I'm aware of).
+Using this hypothesis, it is easy to prove that any lock for which the "pin" is made of multiple parts connected with "AND"s cannot be secure. The proof consists in exhibiting a typical lock-picking attack where each part of the pin is moved independently and the hypothesis is used to determinine whether one part is at the right position. Iterating this let us find to correct position of each part independently from the others, and hence the attack time is only the sum of the number of part positions instead of the product. In a sense, the assumption of imperfect "AND" is just the justification that lock-picking is always possible for a very large class of locks (in this case, all locks that I'm aware of).
 
 Note that the attack is practical only if the tests of the pin's position can be made quickly enough.
 
-For instance, applied to StuffMadeHere's lock, the imperfection in the "AND" is in the fact that forcfully operating the lock should result in a slighthly bigger rotation when one of the pin is aligned with its gate. In this case the attack is made longer by the fact that each try has to include the time to test the pin *and* lift them, rotate them to the gate, and bring them back to the accessible chamber.
+For instance, applied to StuffMadeHere's lock, the imperfection in the "AND" is in the fact that forcefully operating the lock should result in a sligthly bigger rotation when one of the pin is aligned with its gate. In this case the attack is made longer by the fact that each try has to include the time to test the pin *and* lift them, rotate them to the gate, and bring them back to the accessible chamber.
 
-Thus, one way of being immunie to the lock-picking attack is to have only a single pin. The downside is that it still needs to have enough possible states (ie, keys) so that brute-force attacks are unpractical.
+Thus, one way of being immune to the lock-picking attack is to have only a single pin. The downside is that it still needs to have enough possible states (ie, keys) so that brute-force attacks are unpractical.
 
 
 ### mechanical design.
@@ -76,17 +76,15 @@ either the pin has a hole and the driver pin is a needle, or the opposite. I don
 
 the key must tightly couple to another piece "plug" to have the correct position relative to the pin
 
-the driver pin is going to be forced by an attacker to be as reliable as possible on hole detecion
+the driver pin is going to be forced by an attacker to be as reliable as possible on hole detection
 
 there is no way around the fact that if the pin is not in the correct state, then only it will prevent the driver from moving. We can have a huge force reduction to ensure that it cannot be broken.
 one way is a track on the housing driving the driver position, with appropriate slope for the reduction
-to composate forcing, the track could have a spring loaded trapdoor to a dead end tha open when too much force is applied. complicated.
+to compensate forcing, the track could have a spring loaded trapdoor to a dead end that open when too much force is applied. complicated.
 alternatively, the housing is a cam and the driver a follower, with a spring. risky?
 alternatively, the driver could be a screw that would turn with the housing as a gear. complicated.
-
 OR, make it so that breaking the pin leads to a locked and un-unlockable lock.
-
-
+Current approach : make the driver pin strong enough (eg 3mm diameter). Its insertion into the hole is done with a spring with no external access so it cannot be used to damage the key pin
 
 ### manufacturing constraints:
 
@@ -94,7 +92,7 @@ size of key space is D^2 where D is the sole parameter := min distance between p
 D ~= max allowance + extra to prevent chipping off pin. independent from pin diameter -> make pin diameter as large as possible.
 primary objective is tigh tolerances, because the key space is essentially  pin size/tolerance
 
-therfore the key, pin and plug should all be one solid part (and not a assembly). as a result I'll try to rely only on cylinders on a lathe and drilled.
+therefore the key, pin and plug should all be one solid part (and not a assembly). as a result I'll try to rely only on cylinders on a lathe and drilled.
 
 I'm not caring a lot about non-covert attack, but as a rule of thumb any destructive attack should requiring drilling though at least 2mm of steel.
 
@@ -105,12 +103,12 @@ driver_pin spring: https://www.leespring.com/compression-springs?search=CI008C02
 ----------------------------
 ##   other design
 
-instead of relying of a single pin, we can keep multiple pins but instead test them sequentially one after the other. Algorithmically, this is like having a temporary variable x, and computing x <- (x AND pin) while iterating on pin. The physical element that tests the pins positions can only test one pin at a time, and has an internal state that is set iff the current pin isn't correct. That element is moved from pin to pin, and when it reaches the end, the lock will only open if the internal state is not set. When repositionning the testing element, the internal state is reset.
-Lets call A the follwing assumption: when testing a pin, it must not be possible to detect whether the internal state has been set or not. Assuming A, there is no way to recover information about the key from manipulation of pins, because the testing element erases the information about the already tested pins (it only stores the AND of the already tested pins).
+instead of relying of a single pin, we can keep multiple pins but instead test them sequentially one after the other. Algorithmically, this is like having a temporary variable x, and computing x <- (x AND pin) while iterating on pin. The physical element that tests the pins positions can only test one pin at a time, and has an internal state that is set iff the current pin isn't correct. That element is moved from pin to pin, and when it reaches the end, the lock will only open if the internal state is not set. When repositioning the testing element, the internal state is reset.
+Lets call A the following assumption: when testing a pin, it must not be possible to detect whether the internal state has been set or not. Assuming A, there is no way to recover information about the key from manipulation of pins, because the testing element erases the information about the already tested pins (it only stores the AND of the already tested pins).
 Thus the design is focused on making A a trustworthy assumption.
 
 
-Note: one can generalize this idea by observing that the lock can be made to compute anything (mechanically, or not even). For instance, one could embed the verification algorithm of a digital signature scheme. In the case where the computation is done electronically, this is equivalent to digital locks. Though it would be interesting to avoid the issue of digital locks (EM-based interference) by using an alternative basis for computation, eg microfluidics, see below
+Note: one can generalise this idea by observing that the lock can be made to compute anything (mechanically, or not even). For instance, one could embed the verification algorithm of a digital signature scheme. In the case where the computation is done electronically, this is equivalent to digital locks. Though it would be interesting to avoid the issue of digital locks (EM-based interference) by using an alternative basis for computation, eg microfluidics, see below
 
 
 ----------------------------
