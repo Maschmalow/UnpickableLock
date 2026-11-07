@@ -1,6 +1,8 @@
-Lock notes
+# WARNING: this is WIP, nothing here has been made with readability in mind 
 
-Overall principle:
+Below are my current notes
+
+### Overall principle:
 
 Lets take a cryptographic approach.
 
@@ -35,7 +37,8 @@ The key is an element from the key space, whose only job is  to manipultate the 
 
 the driver pin is the thing that is actionned when attempting to open the lock. It is going to interact with the pin, and result in a position that blocks opening if the pin is not a the correct state.
 
-Security.
+
+### Security.
 
 Here the assumption that drives the design of this lock:
 Let two separate physical parts X, Y, and let x,y be two possible positions of X and Y respectively.  Any physical implementation of a "position(X)=x  AND position(Y)=y" is imperfect, ie, it will also leak "position(X)=x OR position(Y)=y".
@@ -53,7 +56,8 @@ For instance, applied to StuffMadeHere's lock, the imperfection in the "AND" is 
 
 Thus, one way of being immunie to the lock-picking attack is to have only a single pin. The downside is that it still needs to have enough possible states (ie, keys) so that brute-force attacks are unpractical.
 
-mechanical design.
+
+### mechanical design.
 
 
 possible basic 2d shapes for the pin/driver: 
@@ -83,7 +87,8 @@ alternatively, the driver could be a screw that would turn with the housing as a
 OR, make it so that breaking the pin leads to a locked and un-unlockable lock.
 
 
-manufacturing constraints:
+
+### manufacturing constraints:
 
 size of key space is D^2 where D is the sole parameter := min distance between pin and hole that guarantees pin does not enter hole. 
 D ~= max allowance + extra to prevent chipping off pin. independent from pin diameter -> make pin diameter as large as possible.
@@ -96,9 +101,9 @@ I'm not caring a lot about non-covert attack, but as a rule of thumb any destruc
 key_pin spring :   https://www.leespring.com/compression-springs?search=CI010EG13M ... too thin?
 driver_pin spring: https://www.leespring.com/compression-springs?search=CI008C02M
 
+
 ----------------------------
-   other design
-----------------------------
+##   other design
 
 instead of relying of a single pin, we can keep multiple pins but instead test them sequentially one after the other. Algorithmically, this is like having a temporary variable x, and computing x <- (x AND pin) while iterating on pin. The physical element that tests the pins positions can only test one pin at a time, and has an internal state that is set iff the current pin isn't correct. That element is moved from pin to pin, and when it reaches the end, the lock will only open if the internal state is not set. When repositionning the testing element, the internal state is reset.
 Lets call A the follwing assumption: when testing a pin, it must not be possible to detect whether the internal state has been set or not. Assuming A, there is no way to recover information about the key from manipulation of pins, because the testing element erases the information about the already tested pins (it only stores the AND of the already tested pins).
@@ -109,8 +114,7 @@ Note: one can generalize this idea by observing that the lock can be made to com
 
 
 ----------------------------
-   other (Dank) design
-----------------------------
+##   other (Dank) design
 
 
  the computation can be purely analogic. with hydro power the key could simply a pressure value, ie, a piston is moved by a given amount by the key, which moves the piston at the other end of the tube, lock unlocks only when at a specific position.
@@ -119,8 +123,8 @@ To avoid testing every position very quickly, the testing procedure can close th
 
 
 
-lower bound on the constants: Adding delay
-=======================================================
+----------------------------
+## lower bound on the constants: Adding delay
 
 everything above focuses on making a lock that is asymptotically secure (ie attack_time = O(key_space_size) ), but doesn't address the constants in the equation. for crypto this is a smaller issue because each step is so short, but in physical reality the number of steps isn't so big so the constants may be more important.
 In our case, all lock attacks essentially use two operations: set pins, test pins (the latter potentially leaks info). Thus there are only two time constants, one for each operation.
